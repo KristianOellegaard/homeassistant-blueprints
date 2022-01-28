@@ -33,7 +33,6 @@ blueprint:
         number:
           min: 0
           max: 100
-          unit_of_measurement: lux
     lux_sensor:
       name: LUX sensor
       selector:
