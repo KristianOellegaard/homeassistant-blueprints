@@ -1,8 +1,8 @@
 blueprint:
-  name: "Motion-activated Light w/ LUX threshold"
-  description: "Turn on a light when motion is detected and LUX value above threshold. Based on https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/blueprints/motion_light.yaml"
+  name: "Motion-activated Light When Sun Down"
+  description: "Turn on a light when motion is detected and the sun is down. Based on https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/blueprints/motion_light.yaml"
   domain: automation
-  source_url: https://github.com/KristianOellegaard/homeassistant-blueprints/blob/master/motion_light_improved.yaml
+  source_url: https://github.com/KristianOellegaard/homeassistant-blueprints/blob/master/motion_light_no_sun.yaml
   input:
     motion_entity:
       name: Motion Sensor
