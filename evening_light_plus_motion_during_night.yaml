@@ -58,7 +58,7 @@ action:
     service: light.turn_on
     target: !input light_target
   - alias: "Wait until there is no motion from device"
-    condition:
+    conditions:
       - condition: state
         alias: "Activated by motion sensor"
         entity_id: !input motion_entity
@@ -70,7 +70,7 @@ action:
       to: "off"
   - alias: "Wait the number of seconds that has been set"
     delay: !input no_motion_wait
-    condition:
+    conditions:
       - condition: state
         alias: "Activated by motion sensor"
         entity_id: !input motion_entity
@@ -78,7 +78,7 @@ action:
   - alias: "Turn off the light"
     service: light.turn_off
     target: !input light_target
-    condition:
+    conditions:
       - condition: time
         alias: "Only turn off after `only_motion_after`"
         # At least one of the following is required.
