@@ -1,0 +1,86 @@
+blueprint:
+  name: "Evening Lights + motion during night"
+  description: "Turn on the lights when the sun goes down and motion lights after that. Off when the sun is up. Based on https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/blueprints/motion_light.yaml"
+  domain: automation
+  source_url: https://github.com/KristianOellegaard/homeassistant-blueprints/blob/master/evening_light_plus_motion_during_night.yaml
+  input:
+    motion_entity:
+      name: Motion Sensor
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: motion
+    light_target:
+      name: Light
+      selector:
+        target:
+          entity:
+            domain: light
+    no_motion_wait:
+      name: Wait time
+      description: Time to leave the light on after last motion is detected.
+      default: 120
+      selector:
+        number:
+          min: 0
+          max: 3600
+          unit_of_measurement: seconds
+    only_motion_after:
+      name: "Turn off and rely on motion after time"
+      default: "00:00"
+      selector:
+        time:
+
+# If motion is detected within the delay,
+# we restart the script.
+mode: restart
+max_exceeded: silent
+
+trigger:
+  - platform: state
+    entity_id: !input motion_entity
+    from: "off"
+    to: "on"
+  - platform: sun
+    event: sunset
+    offset: 0
+  - platform: time
+    at: !input only_motion_after
+
+condition:
+  alias: "Sun down"
+  condition: state  # from sunset until sunrise
+  entity_id: sun.sun
+  state: "below_horizon"
+
+action:
+  - alias: "Turn on the light"
+    service: light.turn_on
+    target: !input light_target
+  - alias: "Wait until there is no motion from device"
+    condition:
+      alias: "Activated by motion sensor"
+      condition: state
+      entity_id: !input motion_entity
+      state: "on"
+    wait_for_trigger:
+      platform: state
+      entity_id: !input motion_entity
+      from: "on"
+      to: "off"
+  - alias: "Wait the number of seconds that has been set"
+    delay: !input no_motion_wait
+    condition:
+      alias: "Activated by motion sensor"
+      condition: state
+      entity_id: !input motion_entity
+      state: "on"
+  - alias: "Turn off the light"
+    service: light.turn_off
+    target: !input light_target
+    condition:
+      alias: "Only turn off after `only_motion_after`"
+      condition: time
+      # At least one of the following is required.
+      after: !input only_motion_after
+      before: "06:00:00" # Get sunrise
