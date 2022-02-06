@@ -59,10 +59,10 @@ action:
     target: !input light_target
   - alias: "Wait until there is no motion from device"
     condition:
-      alias: "Activated by motion sensor"
-      condition: state
-      entity_id: !input motion_entity
-      state: "on"
+      - condition: state
+        alias: "Activated by motion sensor"
+        entity_id: !input motion_entity
+        state: "on"
     wait_for_trigger:
       platform: state
       entity_id: !input motion_entity
@@ -71,16 +71,16 @@ action:
   - alias: "Wait the number of seconds that has been set"
     delay: !input no_motion_wait
     condition:
-      alias: "Activated by motion sensor"
-      condition: state
-      entity_id: !input motion_entity
-      state: "on"
+      - condition: state
+        alias: "Activated by motion sensor"
+        entity_id: !input motion_entity
+        state: "on"
   - alias: "Turn off the light"
     service: light.turn_off
     target: !input light_target
     condition:
-      alias: "Only turn off after `only_motion_after`"
-      condition: time
-      # At least one of the following is required.
-      after: !input only_motion_after
-      before: "06:00:00" # Get sunrise
+      - condition: time
+        alias: "Only turn off after `only_motion_after`"
+        # At least one of the following is required.
+        after: !input only_motion_after
+        before: "06:00:00" # Get sunrise
