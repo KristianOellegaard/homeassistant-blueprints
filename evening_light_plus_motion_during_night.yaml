@@ -1,5 +1,5 @@
 blueprint:
-  name: "Evening Lights + motion during night"
+  name: "Evening Lights + motion during night (v1)"
   description: "Turn on the lights when the sun goes down and motion lights after that. Off when the sun is up. Based on https://github.com/home-assistant/core/blob/dev/homeassistant/components/automation/blueprints/motion_light.yaml"
   domain: automation
   source_url: https://github.com/KristianOellegaard/homeassistant-blueprints/blob/master/evening_light_plus_motion_during_night.yaml
