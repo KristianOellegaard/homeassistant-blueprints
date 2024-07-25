@@ -5,6 +5,7 @@ blueprint:
   input:
     motion_entity:
       name: Motion Sensor
+      multiple: false
       selector:
         entity:
           domain: binary_sensor
