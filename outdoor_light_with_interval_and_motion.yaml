@@ -17,6 +17,7 @@ blueprint:
             domain: light
     on_schedule:
       name: Lights On Schedule
+      multiple: false
       selector:
         target:
           entity:
