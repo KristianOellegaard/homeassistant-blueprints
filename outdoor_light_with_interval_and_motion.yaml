@@ -35,10 +35,9 @@ trigger:
   - platform: sun
     event: sunrise
     offset: 0
-  - platform: state
+  - platform: state  # Trigger on both on and off, so it also turns it off eventually
     entity_id:
       - !input motion_entity
-    to: "on"
 condition: []
 action:
   - if:
