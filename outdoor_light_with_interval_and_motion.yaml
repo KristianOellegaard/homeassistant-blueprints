@@ -1,6 +1,7 @@
 blueprint:
   name: Outdoor Light w/ Interval and Motion
   description: Turn on outdoor lights after sunset within interval and outside interval on motion detected
+  source_url: https://raw.githubusercontent.com/KristianOellegaard/homeassistant-blueprints/master/outdoor_light_with_interval_and_motion.yaml
   domain: automation
   input:
     motion_entity:
@@ -12,7 +13,7 @@ blueprint:
             device_class: motion
           multiple: false
     light_target:
-      name: Light
+      name: Lights
       selector:
         target:
           entity:
