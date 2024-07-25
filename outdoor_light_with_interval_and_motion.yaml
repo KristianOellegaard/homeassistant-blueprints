@@ -35,7 +35,9 @@ trigger:
   - platform: sun
     event: sunrise
     offset: 0
-  - platform: state  # Trigger on both on and off, so it also turns it off eventually
+  - platform: state
+    id: motion
+    to: "on"
     entity_id:
       - !input motion_entity
 condition: []
@@ -57,6 +59,20 @@ action:
         data:
           brightness_pct: 100
         target: !input light_target
+      - if:
+          - condition: trigger
+            id:
+              - motion
+        then:
+          - delay:
+              hours: 0
+              minutes: 3
+              seconds: 0
+              milliseconds: 0
+          - service: light.turn_off
+            target: !input light_target
+            data: {}
+    
     else:
       - service: light.turn_off
         data: {}
