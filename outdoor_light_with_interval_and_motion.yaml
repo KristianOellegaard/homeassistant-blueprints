@@ -5,10 +5,10 @@ blueprint:
   input:
     motion_entity:
       name: Motion Sensor
-      multiple: false
       selector:
         entity:
           domain: binary_sensor
+          multiple: false
           device_class: motion
     light_target:
       name: Light
@@ -18,10 +18,10 @@ blueprint:
             domain: light
     on_schedule:
       name: Lights On Schedule
-      multiple: false
       selector:
         target:
           entity:
+            multiple: false
             domain: schedule
 mode: restart
 max_exceeded: silent
