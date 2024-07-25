@@ -34,7 +34,8 @@ trigger:
     event: sunrise
     offset: 0
   - platform: state
-    entity_id: !input motion_entity
+    entity_id:
+      - !input motion_entity
     to: "on"
 condition: []
 action:
