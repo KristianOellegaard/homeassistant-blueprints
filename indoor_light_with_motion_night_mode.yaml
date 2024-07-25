@@ -1,0 +1,71 @@
+blueprint:
+  name: Indoor Light w/ Motion Sensor & Night Mode
+  description: Turn on outdoor lights after sunset within interval and outside interval on motion detected
+  source_url: https://raw.githubusercontent.com/KristianOellegaard/homeassistant-blueprints/master/indoor_light_with_motion_night_mode.yaml
+  domain: automation
+  input:
+    motion_entity:
+      name: Motion Sensor
+      selector:
+        entity:
+          filter:
+            domain: binary_sensor
+            device_class: motion
+          multiple: false
+    light_target:
+      name: Lights
+      selector:
+        target:
+          entity:
+            domain: light
+    night_schedule:
+      name: Interval for Night Light
+      selector:
+        entity:
+          multiple: false
+          filter:
+            domain: schedule
+trigger:
+  - platform: state
+    entity_id:
+      - !input motion_entity
+    to: "on"
+condition: []
+action:
+  - if:
+      - condition: state
+        entity_id: !input night_schedule
+        state: "on"
+    then:
+      - service: light.turn_on
+        data:
+          brightness_pct: 40
+        target: !input light_target
+    else:
+      - service: light.turn_on
+        data:
+          brightness_pct: 100
+        target: !input light_target
+  - wait_for_trigger:
+      - platform: state
+        entity_id: !input motion_entity
+        to: "off"
+    timeout:
+      hours: 0
+      minutes: 15
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_on
+    data:
+      brightness_pct: 10
+      transition: 60
+    target: !input light_target
+  - delay:
+      hours: 0
+      minutes: 2
+      seconds: 0
+      milliseconds: 0
+  - service: light.turn_off
+    data: {}
+    target: !input light_target
+mode: restart
