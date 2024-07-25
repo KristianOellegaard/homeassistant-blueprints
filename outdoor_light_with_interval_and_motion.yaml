@@ -1,0 +1,60 @@
+blueprint:
+  name: Outdoor Light w/ Interval and Motion
+  description: Turn on outdoor lights after sunset within interval and outside interval on motion detected
+  domain: automation
+  input:
+    motion_entity:
+      name: Motion Sensor
+      selector:
+        entity:
+          domain: binary_sensor
+          device_class: motion
+    light_target:
+      name: Light
+      selector:
+        target:
+          entity:
+            domain: light
+    on_schedule:
+      name: Lights On Schedule
+      selector:
+        target:
+          entity:
+            domain: schedule
+  trigger:
+    - platform: sun
+      event: sunset
+    - platform: state
+      entity_id: !input on_schedule
+    - platform: sun
+      event: sunrise
+      offset: 0
+    - platform: state
+      entity_id: !input motion_entity
+      to: "on"
+  condition: []
+  action:
+    - if:
+        - condition: sun
+          before: sunrise
+          after: sunset
+        - condition: or
+          conditions:
+            - condition: state
+              entity_id: !input on_schedule
+              state: "on"
+            - condition: state
+              entity_id: !input motion_entity
+              state: "on"
+      then:
+        - service: light.turn_on
+          data:
+            brightness_pct: 100
+          target:
+            device_id: !input light_target
+      else:
+        - service: light.turn_off
+          data: {}
+          target:
+            device_id: !input light_target
+  mode: single
