@@ -1,6 +1,6 @@
 blueprint:
   name: Indoor Light w/ Motion Sensor & Night Mode
-  description: Turn on outdoor lights after sunset within interval and outside interval on motion detected
+  description: Motion-based indoor light which dims the light during the night
   source_url: https://raw.githubusercontent.com/KristianOellegaard/homeassistant-blueprints/master/indoor_light_with_motion_night_mode.yaml
   domain: automation
   input:
