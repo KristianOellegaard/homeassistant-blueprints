@@ -4,6 +4,22 @@ blueprint:
   source_url: https://raw.githubusercontent.com/KristianOellegaard/homeassistant-blueprints/master/indoor_light_with_motion_night_mode.yaml
   domain: automation
   input:
+    nightmode_percent:
+      name: "Percent light on nightmode"
+      default: 40
+      selector:
+        number:
+          min: 0
+          max: 100
+          unit_of_measurement: "%"
+    wait_until_dim:
+      name: "Minutes from motion stops until the light begins to dim"
+      default:
+        hours: 0
+        minutes: 0
+        seconds: 0
+      selector:
+        duration:
     motion_entity:
       name: Motion Sensor
       selector:
@@ -39,7 +55,7 @@ action:
     then:
       - service: light.turn_on
         data:
-          brightness_pct: 40
+          brightness_pct: !input nightmode_percent
         target: !input light_target
     else:
       - service: light.turn_on
@@ -55,6 +71,8 @@ action:
       minutes: 15
       seconds: 0
       milliseconds: 0
+  - delay:
+      !input wait_until_dim
   - service: light.turn_on
     data:
       brightness_pct: 10
