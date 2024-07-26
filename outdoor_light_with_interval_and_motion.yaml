@@ -4,6 +4,14 @@ blueprint:
   source_url: https://raw.githubusercontent.com/KristianOellegaard/homeassistant-blueprints/master/outdoor_light_with_interval_and_motion.yaml
   domain: automation
   input:
+    wait_until_off:
+      name: "Minutes from motion stops until the light turn off"
+      default:
+        hours: 0
+        minutes: 3
+        seconds: 0
+      selector:
+        duration:
     motion_entity:
       name: Motion Sensor
       selector:
@@ -65,10 +73,7 @@ action:
               - motion
         then:
           - delay:
-              hours: 0
-              minutes: 3
-              seconds: 0
-              milliseconds: 0
+              !input wait_until_off
           - service: light.turn_off
             target: !input light_target
             data: {}
