@@ -71,6 +71,9 @@ action:
           - condition: trigger
             id:
               - motion
+          - condition: state
+            entity_id: !input on_schedule
+            state: "off"
         then:
           - delay:
               !input wait_until_off
